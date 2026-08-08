@@ -1,0 +1,4 @@
+interface:
+  display_name: "AFT Gauntlet"
+  short_description: "Generate research-backed Gauntlet prompts"
+  default_prompt: "Use $aft-gauntlet to generate a research-backed Gauntlet prompt for my project brief."
