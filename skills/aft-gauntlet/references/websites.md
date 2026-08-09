@@ -16,6 +16,12 @@ Make the prompt establish audience, customer jobs, objections, content language,
 
 Never fabricate reviews, awards, certifications, staff, addresses, availability, legal text, ratings, or performance claims. Centralize concept data and identify owner-confirmation items.
 
+## Brand Invention Authority
+
+Do not infer permission to invent a brand, name, or business merely because the brief omits one. If and only if the original user input explicitly requests brand invention, make the prompt authorize original naming, positioning, narrative, voice, and visual identity based on the supplied context and current research. When material, generate distinct candidates and use fresh critics to compare specificity, memorability, audience fit, extensibility, and visual potential.
+
+Treat the selected identity as a creative concept until the owner confirms it. Keep all real-world claims and operational details separate, and never claim trademark, domain, social-handle, or legal availability without authorized current checks.
+
 ## Visual Direction
 
 Require a visual north star before implementation when no established design system exists. Judge whole-page composition, not isolated cards.

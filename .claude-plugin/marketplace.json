@@ -1,0 +1,33 @@
+{
+  "name": "aft-gauntlet",
+  "owner": {
+    "name": "RNT56",
+    "url": "https://github.com/RNT56"
+  },
+  "description": "AFT Gauntlet skills for research-backed autonomous build prompts.",
+  "plugins": [
+    {
+      "name": "aft-gauntlet",
+      "displayName": "AFT Gauntlet",
+      "source": {
+        "source": "github",
+        "repo": "RNT56/aft-gauntlet"
+      },
+      "description": "Generate research-backed, evidence-gated Gauntlet execution prompts explicitly targeted to Codex or Claude Code.",
+      "version": "1.3.0",
+      "author": {
+        "name": "RNT56",
+        "url": "https://github.com/RNT56"
+      },
+      "homepage": "https://github.com/RNT56/aft-gauntlet",
+      "repository": "https://github.com/RNT56/aft-gauntlet",
+      "category": "Productivity",
+      "tags": [
+        "agent-skills",
+        "builder-critic",
+        "prompt-generation",
+        "research"
+      ]
+    }
+  ]
+}
