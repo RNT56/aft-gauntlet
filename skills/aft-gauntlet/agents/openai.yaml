@@ -1,4 +1,4 @@
 interface:
   display_name: "AFT Gauntlet"
-  short_description: "Generate research-backed Gauntlet prompts"
-  default_prompt: "Use $aft-gauntlet to generate a research-backed Gauntlet prompt for my project brief."
+  short_description: "Generate evidence-gated Gauntlet prompts"
+  default_prompt: "Use $aft-gauntlet to turn my project brief into a research-backed Gauntlet execution prompt for Codex or Claude Code. Ask which harness if I did not specify one."

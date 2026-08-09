@@ -1,67 +1,195 @@
 # AFT Gauntlet
 
-A modular generator for research-backed Gauntlet Loop prompts. It supports websites and local businesses, games, iOS/mobile apps, PWAs, macOS/Windows desktop apps, and hybrid products.
+AFT Gauntlet turns a project brief into one research-backed execution prompt for an autonomous coding agent. It keeps the universal Builder-Critic loop separate from platform-specific quality gates for websites and local businesses, games, iOS/mobile apps, PWAs, macOS/Windows desktop apps, and hybrid products.
 
-The package keeps the universal Builder–Critic loop separate from platform-specific quality gates. A generated prompt gives the lead agent a concrete destination, real comparison bars, relevant assets and integrations, and evidence requirements while leaving architecture and decomposition to the agent.
+The repository ships one standards-based skill that works natively in Codex and Claude Code, plus plugin manifests for both hosts and a deterministic prompt generator. Every generated prompt targets exactly one harness and uses only that harness's continuation and subagent model, while keeping the emitted execution prompt harness-silent.
 
-## Use with Codex
+## Requirements
 
-Install or link `skills/aft-gauntlet` into your Codex skills directory, then ask:
+- Codex or Claude Code with file, shell, and current web-research capabilities
+- Python 3.10 or newer only when using the installer or deterministic prompt composer
+- GitHub access to this repository while it remains private
 
-```text
-Use $aft-gauntlet to generate a Gauntlet prompt for <project brief>.
+The skill itself has no third-party Python dependencies.
+
+## Install the native skill
+
+From a clone of this repository, install the skill for both hosts:
+
+```bash
+python3 scripts/install_skill.py --host both --scope user
 ```
 
-The skill reads only the relevant platform packs. It uses Codex's native goal and subagent capabilities when the generated prompt is executed and does not assume `/loop` exists on every Codex surface.
+This copies the same skill to the current user locations:
 
-## Use with Claude Code or another agent
+- Codex: `~/.agents/skills/aft-gauntlet`
+- Claude Code: `~/.claude/skills/aft-gauntlet`
 
-Copy the contents of [`skills/aft-gauntlet/assets/portable-generator.md`](skills/aft-gauntlet/assets/portable-generator.md), replace the input placeholders, and send it to the agent. The generated execution prompt detects native goal, subagent, and continuation capabilities. Claude Code may use `/loop` when the installed version supports it.
+Use `--mode symlink` to keep both installations linked to the clone. Existing installations are never overwritten silently. Add `--force` to move an existing target to a timestamped backup outside the discoverable `skills/` directory, under `.agents/skill-backups/` or `.claude/skill-backups/`.
 
-You can also compose a ready-to-paste generator prompt:
+For a repository-scoped installation:
+
+```bash
+python3 scripts/install_skill.py \
+  --host both \
+  --scope project \
+  --project /path/to/project
+```
+
+Codex and Claude Code both support the same `SKILL.md` layout and supporting `references/`, `assets/`, and `scripts/` directories. See the official [Codex skill documentation](https://learn.chatgpt.com/docs/build-skills) and [Claude Code skill documentation](https://code.claude.com/docs/en/skills).
+
+## Invoke it
+
+In Codex:
+
+```text
+Use $aft-gauntlet to generate a Codex-targeted Gauntlet prompt for <project brief>.
+```
+
+In Claude Code:
+
+```text
+/aft-gauntlet Generate a Claude-Code-targeted Gauntlet prompt for <project brief>.
+```
+
+The skill generates the execution prompt; it does not build the requested product unless the user separately asks an agent to run that generated prompt.
+
+### Required harness selection
+
+Harness selection is mandatory. The user must say `codex` or `claude-code`; the skill never infers the target from the app in which it is running. If the target is missing, the skill asks one question and stops before research or generation.
+
+- Codex output begins with `/goal` and relies on Codex Goal mode plus native parallel subagents. It contains no Claude Code loop command.
+- Claude Code output begins with a self-paced `/loop` and relies on Claude Code subagents, using an agent team only when already enabled and genuinely helpful. It contains no Codex goal command.
+
+The emitted execution prompt contains neither `Codex` nor `Claude Code`, no target-harness label, and no adapter explanation. Harness selection remains generator input only; the native first-line command carries the execution behavior.
+
+Both variants require immediate fan-out, separate fresh-context critics, parallel specialist reviews after major waves, two critics for high-risk or subjective surfaces, and a final integration critic.
+
+### Optional brand invention
+
+A missing project, brand, or business name is treated as an unknown, not as permission to fabricate one. When the original brief explicitly asks to “invent a brand” or gives equivalent authority, the generated Gauntlet prompt may direct the execution team to develop and critically compare original naming, positioning, voice, narrative, and visual-identity concepts from the supplied context and current research.
+
+Invented identities remain creative proposals. The prompt still forbids fabricated clients, staff, reviews, certifications, awards, performance claims, operational details, and legal text, and it cannot claim trademark, domain, or social-handle availability without authorized current checks.
+
+### Optional Ultracode profile
+
+When Ultracode is already enabled for the Claude Code session, add `--ultracode` to the deterministic composer or explicitly say so when invoking the skill. The output may state that Ultracode is on, but still does not name the harness. It requires dynamic workflows with dependency-aware phases, task-specific agent scopes, explicit artifacts and evidence gates, separate verifier/refuter agents, and one integration owner.
+
+Enable the session setting before pasting the generated `/loop` prompt:
+
+```text
+/effort ultracode
+```
+
+The generator never claims Ultracode is enabled unless the user confirms it.
+
+## Use it as a plugin
+
+The repository root is a skills-only plugin for both hosts:
+
+- Codex manifest: `.codex-plugin/plugin.json`
+- Claude Code manifest: `.claude-plugin/plugin.json`
+- Claude marketplace catalog: `.claude-plugin/marketplace.json`
+
+Test the Claude Code plugin directly from the clone:
+
+```bash
+claude --plugin-dir .
+```
+
+Then invoke the namespaced skill:
+
+```text
+/aft-gauntlet:aft-gauntlet <project brief>
+```
+
+Users with repository access can also add its Claude marketplace and install it:
+
+```text
+/plugin marketplace add RNT56/aft-gauntlet
+/plugin install aft-gauntlet@aft-gauntlet
+```
+
+The Codex manifest is ready for a local Codex marketplace or submission to the universal plugin directory. Until it is listed in a marketplace, the native-skill installer above is the direct local installation path.
+
+## Portable generator
+
+For an agent that does not load Agent Skills, compose a ready-to-paste generator prompt:
 
 ```bash
 python3 skills/aft-gauntlet/scripts/compose_prompt.py \
   --brief my-project.md \
-  --harness auto \
+  --harness codex \
   --platform auto \
   --output generated/my-project-generator.md
 ```
 
-Use `--brief -` for stdin or `--text` for a short inline brief. Platform choices are `auto`, `website`, `game`, `ios-mobile`, `pwa`, `desktop`, and `hybrid`.
+For Claude Code, change the required selector to:
 
-The script performs deterministic prompt assembly. The receiving agent still performs live research before producing the final Gauntlet execution prompt.
+```bash
+--harness claude-code
+```
 
-Example briefs for each platform family live in [`examples/`](examples/). They are suitable for smoke-testing the generator or as starting points for new projects.
+When that session already has Ultracode enabled:
+
+```bash
+--harness claude-code --ultracode
+```
+
+Use `--brief -` for stdin or `--text` for a short inline brief. The only harness choices are `codex` and `claude-code`; there is deliberately no `auto` or generic fallback. Platform choices are `auto`, `website`, `game`, `ios-mobile`, `pwa`, `desktop`, and `hybrid`.
+
+The script performs deterministic assembly. The receiving agent must still inspect the target repository and perform live research before producing the final Gauntlet execution prompt.
 
 ## Package structure
 
 ```text
-skills/aft-gauntlet/
-├── SKILL.md
-├── agents/openai.yaml
-├── assets/
-│   ├── portable-generator.md
-│   └── project-brief-template.md
-├── references/
-│   ├── kernel.md
-│   ├── harness-adapters.md
-│   ├── research-sources.md
-│   ├── integrations.md
-│   ├── websites.md
-│   ├── games.md
-│   ├── ios-mobile.md
-│   ├── pwa.md
-│   └── desktop.md
-└── scripts/compose_prompt.py
+.
+├── .codex-plugin/plugin.json
+├── .claude-plugin/
+│   ├── plugin.json
+│   └── marketplace.json
+├── scripts/
+│   ├── install_skill.py
+│   └── validate_repo.py
+├── skills/aft-gauntlet/
+│   ├── SKILL.md
+│   ├── agents/openai.yaml
+│   ├── assets/
+│   ├── references/
+│   └── scripts/compose_prompt.py
+└── tests/
 ```
 
-## Validation
+Example briefs for every platform family live in `examples/`.
+
+## Validate
+
+Run the portable test suite and repository validator:
 
 ```bash
-python3 -m unittest discover -s tests
+python3 -m unittest discover -s tests -v
 python3 scripts/validate_repo.py
-python3 /path/to/skill-creator/scripts/quick_validate.py skills/aft-gauntlet
+python3 -m py_compile \
+  skills/aft-gauntlet/scripts/compose_prompt.py \
+  scripts/install_skill.py \
+  scripts/validate_repo.py
 ```
 
-GitHub Actions runs the portable tests and repository validator on pushes and pull requests.
+When the relevant development tools are installed, also run:
+
+```bash
+python3 /path/to/skill-creator/scripts/quick_validate.py skills/aft-gauntlet
+python3 /path/to/plugin-creator/scripts/validate_plugin.py .
+claude plugin validate --strict .claude-plugin/plugin.json
+claude plugin validate --strict .claude-plugin/marketplace.json
+```
+
+GitHub Actions runs the portable checks across supported Python versions.
+
+## License
+
+AFT Gauntlet is distributed under the full [MIT License](LICENSE), copyright (c) 2026 RNT56.
+
+## Publication status
+
+The skill and both plugin manifests are complete for local use and MIT-licensed redistribution. Public availability still depends on making the source or release artifact accessible to intended users and completing any desired marketplace review.

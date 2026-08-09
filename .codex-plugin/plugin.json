@@ -1,0 +1,36 @@
+{
+  "name": "aft-gauntlet",
+  "version": "1.3.0",
+  "description": "Generate research-backed, evidence-gated Gauntlet execution prompts explicitly targeted to Codex or Claude Code.",
+  "author": {
+    "name": "RNT56",
+    "url": "https://github.com/RNT56"
+  },
+  "homepage": "https://github.com/RNT56/aft-gauntlet",
+  "repository": "https://github.com/RNT56/aft-gauntlet",
+  "keywords": [
+    "agent-skills",
+    "autonomous-agents",
+    "builder-critic",
+    "prompt-generation",
+    "research"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "AFT Gauntlet",
+    "shortDescription": "Generate evidence-gated Gauntlet prompts",
+    "longDescription": "Turn project briefs into harness-silent execution prompts with native continuation commands, parallel subagents, optional Ultracode workflows, strong independent critic loops, live source requirements, and reproducible completion gates.",
+    "developerName": "RNT56",
+    "category": "Productivity",
+    "capabilities": [
+      "Research",
+      "Prompt generation"
+    ],
+    "websiteURL": "https://github.com/RNT56/aft-gauntlet",
+    "defaultPrompt": [
+      "Generate a Codex-targeted Gauntlet prompt for my project brief.",
+      "Generate a Claude-Code-targeted Gauntlet prompt for my project brief.",
+      "Ask me to select Codex or Claude Code, then create a Builder-Critic execution prompt."
+    ]
+  }
+}
