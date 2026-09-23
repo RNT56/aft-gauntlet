@@ -1,5 +1,14 @@
 # AFT Gauntlet
 
+[![Validate](https://github.com/RNT56/aft-gauntlet/actions/workflows/validate.yml/badge.svg)](https://github.com/RNT56/aft-gauntlet/actions/workflows/validate.yml)
+[![Version](https://img.shields.io/badge/version-1.3.0-blue)](VERSION)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white)](scripts)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-skill-D97757)](https://code.claude.com/docs/en/skills)
+[![Codex](https://img.shields.io/badge/Codex-skill-412991)](https://learn.chatgpt.com/docs/build-skills)
+
+![agent-skills](https://img.shields.io/badge/-agent--skills-informational) ![prompt-engineering](https://img.shields.io/badge/-prompt--engineering-informational) ![autonomous-agents](https://img.shields.io/badge/-autonomous--agents-informational) ![builder-critic](https://img.shields.io/badge/-builder--critic-informational) ![quality-gates](https://img.shields.io/badge/-quality--gates-informational)
+
 AFT Gauntlet turns a project brief into one research-backed execution prompt for an autonomous coding agent. It keeps the universal Builder-Critic loop separate from platform-specific quality gates for websites and local businesses, games, iOS/mobile apps, PWAs, macOS/Windows desktop apps, and hybrid products.
 
 The repository ships one standards-based skill that works natively in Codex and Claude Code, plus plugin manifests for both hosts and a deterministic prompt generator. Every generated prompt targets exactly one harness and uses only that harness's continuation and subagent model, while keeping the emitted execution prompt harness-silent.
